@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AAKRUTI Evaluation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+}
+
+/* HEADER */
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f7fb;
+    padding: 12px 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
+    position: sticky;   /* 👈 makes it stick */
+    top: 0;
+    z-index: 1000; 
+}
+
+.header-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px;
+    font-weight: bold;
+    color: #FF0000;
+    white-space: nowrap;
+}
+
+.home-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.home-btn:hover {
+    background: #0056b3;
+}
+
+.aic-logo {
+    height: 50px;
+    object-fit: contain;
+}
+
+
+/* MAIN LAYOUT */
+.container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    margin-top: 10px; /* space below sticky header */
+}
+
+
+.section {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.left { width: 35%; }
+.right { width: 65%; }
+
+h3 {
+    margin-top: 0;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}
+
+/* INPUTS */
+label { font-size: 14px; font-weight: bold; }
+input, select, textarea {
+    width: 100%;
+    padding: 6px;
+    margin: 4px 0 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* SCORE GRID */
+.score-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.score-box {
+    background: #fafafa;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.score-box h4 {
+    margin: 5px 0 10px;
+    color: #005685;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.score-input {
+    width: 55px;
+    text-align: center;
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+/* SCORE COLORS */
+.score-low { background:#ffe5e5; border-color:#ff4d4d; }
+.score-mid { background:#fff7cc; border-color:#ffcc00; }
+.score-high { background:#e6ffe6; border-color:#33cc33; }
+
+/* BOTTOM SECTION */
+.bottom-section {
+    margin: 0 20px 20px;
+}
+
+.submit-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.submit-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+
+
+.result-box {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+
+.home-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: 0.2s;
+}
+
+.home-btn:hover {
+    background: #0056b3;
+}
+
+.aic-logo {
+    height: 50px;
+    object-fit: contain;
+}
+
+.ack-btn {
+    margin-top: 15px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    background: #28a745;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.ack-btn:hover {
+    background: #218838;
+}
+
+/* SUCCESS POPUP OVERLAY */
+.modal {
+  display: none;              /* Hides popup by default */
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+/* POPUP BOX */
+.modal-content {
+  background: #ffffff;
+  padding: 35px;
+  text-align: center;
+  border-radius: 12px;
+  width: 360px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  animation: popupFade 0.25s ease;
+}
+
+.modal-logo {
+  width: 110px;
+  margin-bottom: 15px;
+}
+
+.ack-btn {
+  margin-top: 20px;
+  padding: 10px 25px;
+  background: #0056D2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@keyframes popupFade {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="main-header">
+    <button onclick="goHome()" class="home-btn">🏠 Home</button>
+
+    <div class="header-title">
+        AAKRUTI Innovation Competition – Evaluation
+    </div>
+
+    <img src="https://github.com/surajgajbhiye15/index/blob/main/Aakruti%20Logo.png?raw=true" alt="AIC Logo" class="aic-logo">
+</div>
+
+
+<form>
+
+<div class="container">
+
+<!-- LEFT: TEAM DETAILS -->
+<div class="section left">
+<h3>Team Details</h3>
+
+<label>Team Country</label>
+<select id="teamCountry">
+<option value="">Select Country</option>
+	<option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>Andorra</option><option>Angola</option>
+	<option>Antigua and Barbuda</option><option>Argentina</option><option>Armenia</option><option>Australia</option><option>Austria</option>
+	<option>Azerbaijan</option><option>Bahamas</option><option>Bahrain</option><option>Bangladesh</option><option>Barbados</option><option>Belarus</option>
+	<option>Belgium</option><option>Belize</option><option>Benin</option><option>Bhutan</option><option>Bolivia</option><option>Bosnia and Herzegovina</option><option>Botswana</option>
+	<option>Brazil</option><option>Brunei</option><option>Bulgaria</option><option>Burkina Faso</option><option>Burundi</option><option>Cabo Verde</option><option>Cambodia</option>
+	<option>Cameroon</option><option>Canada</option><option>Central African Republic</option><option>Chad</option><option>Chile</option><option>China</option>
+	<option>Colombia</option><option>Comoros</option><option>Congo (Congo-Brazzaville)</option><option>Costa Rica</option><option>Croatia</option><option>Cuba</option>
+	<option>Cyprus</option><option>Czechia (Czech Republic)</option><option>Denmark</option><option>Djibouti</option><option>Dominica</option><option>Dominican Republic</option>
+	<option>Ecuador</option><option>Egypt</option><option>El Salvador</option><option>Equatorial Guinea</option><option>Eritrea</option><option>Estonia</option><option>Eswatini (fmr. Swaziland)</option>
+	<option>Ethiopia</option><option>Fiji</option><option>Finland</option><option>France</option><option>Gabon</option><option>Gambia</option><option>Georgia</option>
+	<option>Germany</option><option>Ghana</option><option>Greece</option><option>Grenada</option><option>Guatemala</option><option>Guinea</option><option>Guinea-Bissau</option>
+	<option>Guyana</option><option>Haiti</option><option>Honduras</option><option>Hungary</option><option>Iceland</option><option>India</option><option>Indonesia</option>
+	<option>Iran</option><option>Iraq</option><option>Ireland</option><option>Israel</option><option>Italy</option><option>Jamaica</option><option>Japan</option><option>Jordan</option>
+	<option>Kazakhstan</option><option>Kenya</option><option>Kiribati</option><option>Kuwait</option><option>Kyrgyzstan</option><option>Laos</option><option>Latvia</option>
+	<option>Lebanon</option><option>Lesotho</option><option>Liberia</option><option>Libya</option><option>Liechtenstein</option><option>Lithuania</option><option>Luxembourg</option>
+	<option>Madagascar</option><option>Malawi</option><option>Malaysia</option><option>Maldives</option><option>Mali</option><option>Malta</option><option>Marshall Islands</option>
+	<option>Mauritania</option><option>Mauritius</option><option>Mexico</option><option>Micronesia</option><option>Moldova</option><option>Monaco</option><option>Mongolia</option>
+	<option>Montenegro</option><option>Morocco</option><option>Mozambique</option><option>Myanmar (Burma)</option><option>Namibia</option><option>Nauru</option><option>Nepal</option>
+	<option>Netherlands</option><option>New Zealand</option><option>Nicaragua</option><option>Niger</option><option>Nigeria</option><option>North Korea</option><option>North Macedonia</option>
+	<option>Norway</option><option>Oman</option><option>Pakistan</option><option>Palau</option><option>Panama</option><option>Papua New Guinea</option><option>Paraguay</option>
+	<option>Peru</option><option>Philippines</option><option>Poland</option><option>Portugal</option><option>Qatar</option><option>Romania</option><option>Russia</option>
+	<option>Rwanda</option><option>Saint Kitts and Nevis</option><option>Saint Lucia</option><option>Saint Vincent and the Grenadines</option><option>Samoa</option><option>San Marino</option><option>Sao Tome and Principe</option><option>Saudi Arabia</option>
+	<option>Senegal</option><option>Serbia</option><option>Seychelles</option><option>Sierra Leone</option><option>Singapore</option><option>Slovakia</option><option>Slovenia</option>
+	<option>Solomon Islands</option><option>Somalia</option><option>South Africa</option><option>South Korea</option><option>South Sudan</option><option>Spain</option>
+	<option>Sri Lanka</option><option>Sudan</option><option>Suriname</option><option>Sweden</option><option>Switzerland</option><option>Syria</option><option>Taiwan</option>
+	<option>Tajikistan</option><option>Tanzania</option><option>Thailand</option><option>Timor-Leste</option><option>Togo</option><option>Tonga</option><option>Trinidad and Tobago</option>
+	<option>Tunisia</option><option>Turkey</option><option>Turkmenistan</option><option>Tuvalu</option><option>Uganda</option><option>Ukraine</option><option>United Arab Emirates</option>
+	<option>United Kingdom</option><option>United States</option><option>Uruguay</option><option>Uzbekistan</option><option>Vanuatu</option><option>Vatican City</option><option>Venezuela</option>
+	<option>Vietnam</option><option>Yemen</option><option>Zambia</option><option>Zimbabwe</option>
+</select>
+
+<label>Team ID</label>
+<input type="text" id="teamId" required>
+
+<label>Team Name</label>
+<input type="text" id="teamName" required>
+
+<label>Team Leader Email</label>
+<input type="email" id="email" required>
+
+<label>Project URL</label>
+<input type="url" id="projectUrl" required>
+
+<label>Theme</label>
+<select id="theme" required>
+<option value="">Select Theme</option>
+<option>Healthcare</option>
+<option>Environment</option>
+<option>Smart Cities</option>
+<option>Education</option>
+<option>Manufacturing</option>
+</select>
+</div>
+
+<!-- RIGHT: SCORING -->
+<div class="section right">
+<h3>Evaluation Scores (0–5)</h3>
+
+<div class="score-grid">
+
+<div class="score-box">
+<h4>A. Overall Project</h4>
+<div class="score-item">Theme Adherence <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Creativity <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Originality <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Feasibility <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+</div>
+
+<div class="score-box">
+<h4>B. CAD</h4>
+<div class="score-item">Part/Assembly/Drawing <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Design Appeal <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Add Ins <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Rendering <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+</div>
+
+<div class="score-box">
+<h4>C. Presentation</h4>
+<div class="score-item">Problem Statement <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Product Concept <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Working <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Calculations <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Market Survey/Costing <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+</div>
+
+<div class="score-box">
+<h4>D. Videos</h4>
+<div class="score-item">Journey Video <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+<div class="score-item">Pitch Video <input type="number" class="score-input" min="0" max="5" required oninput="calcScores(this)"></div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- BOTTOM SECTION -->
+<div class="section bottom-section">
+<h3>Final Evaluation</h3>
+
+<div class="result-box">Total Score: <b id="totalScore">0</b></div>
+<div class="result-box">Average Score: <b id="avgScore">0</b></div>
+
+<label>Eligible for TOP-30</label>
+<select id="top30" required><option value="">Select</option><option>Yes</option><option>No</option></select>
+
+<label>Simulations Done</label>
+<select id="simulation" required><option value="">Select</option><option>Yes</option><option>No</option></select>
+
+<label>Evaluator Comments</label>
+<textarea id="comments" rows="3" required></textarea>
+
+<label>Evaluator Trigram</label>
+<input type="text" id="trigram" maxlength="6" required>
+
+<label>Evaluator Name</label>
+<input type="text" id="evaluatorName" required>
+
+<br><br>
+<div class="submit-container">
+    <button type="submit" class="submit-btn">Submit Evaluation</button>
+</div>
+
+</div>
+
+</form>
+
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <img src="https://github.com/surajgajbhiye15/index/blob/main/Aakruti%20Logo.png?raw=true" alt="AIC Logo" class="modal-logo">
+        <h2>Thank You for the Evaluation!</h2>
+        <p>Your evaluation has been submitted successfully.</p>
+        <button onclick="acknowledgeSubmission()" class="ack-btn">Acknowledge</button>
+    </div>
+</div>
+
+<script>
+function calcScores(input) {
+    const value = parseInt(input.value);
+    input.classList.remove("score-low","score-mid","score-high");
+
+    if (!isNaN(value)) {
+        if (value <= 2) input.classList.add("score-low");
+        else if (value == 3) input.classList.add("score-mid");
+        else input.classList.add("score-high");
+    }
+
+    let total = 0, count = 0;
+    document.querySelectorAll(".score-input").forEach(box => {
+        let v = parseInt(box.value);
+        if (!isNaN(v)) { total += v; count++; }
+    });
+
+    document.getElementById("totalScore").innerText = total;
+    document.getElementById("avgScore").innerText = count ? (total/count).toFixed(2) : "0";
+}
+	
+document.addEventListener("DOMContentLoaded", function () {
+	new Choices('#teamCountry', { searchEnabled: true, itemSelectText: '', shouldSort: false });
+});
+</script>
+
+<script>
+function acknowledgeSubmission() {
+    document.getElementById("successModal").style.display = "none";
+
+    document.querySelector("form").reset();
+    document.getElementById("totalScore").innerText = "0";
+    document.getElementById("avgScore").innerText = "0";
+    document.querySelectorAll(".score-input").forEach(i => 
+        i.classList.remove("score-low","score-mid","score-high")
+    );
+
+    window.scrollTo(0, 0);
+}
+</script>
+
+<script>
+function showMessage(message) {
+    document.querySelector("#successModal h2").innerText = message;
+    document.querySelector("#successModal p").innerText = "";
+    document.getElementById("successModal").style.display = "flex";
+}
+</script>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycby_dbR0ym16e44bbPSkYFpMef35fBbDDshYmgpLZeBtqwlrcBvRDIegMK53Em8Moyol/exec";
+const sheetCheckURL = "https://opensheet.elk.sh/1hbsjsYNuA9FulSPBrh4wkBoHpE-ExbMG5mb0FPPUZes/Sheet1";
+
+
+
+document.querySelector("form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+	const countryValue = document.getElementById("teamCountry").value;
+
+	if (!countryValue) {
+		showMessage("⚠ Please select a Team Country");
+		return;
+	}
+
+
+    const teamId = document.getElementById("teamId").value.trim();
+
+    try {
+        // 🔍 CHECK FOR DUPLICATE TEAM ID
+        const res = await fetch(sheetCheckURL);
+        const sheetData = await res.json();
+
+        const duplicate = sheetData.some(row => {
+			const existingId = (row["Team ID"] || "").toString().trim().toLowerCase();
+			return existingId === teamId.toLowerCase();
+		});
+
+        if (duplicate) {
+            showMessage("❌ This Team ID has already been evaluated!");
+            return; // STOP submission
+        }
+
+    } catch (err) {
+        console.error("Sheet check failed:", err);
+        showMessage("⚠ Unable to verify Team ID. Try again.");
+        return;
+    }
+
+    // ✅ CONTINUE IF NO DUPLICATE
+    const scores = Array.from(document.querySelectorAll(".score-input")).map(i => parseInt(i.value) || 0);
+    const [A1,A2,A3,A4,B1,B2,B3,B4,C1,C2,C3,C4,C5,D1,D2] = scores;
+
+    const Atotal = A1+A2+A3+A4;
+    const Btotal = B1+B2+B3+B4;
+    const Ctotal = C1+C2+C3+C4+C5;
+    const Dtotal = D1+D2;
+    const grandTotal = Atotal + Btotal + Ctotal + Dtotal;
+    const average = (grandTotal / scores.length).toFixed(2);
+
+    const data = {
+        country: teamCountry.value,
+        teamId: teamId,
+        teamName: teamName.value,
+        email: email.value,
+        projectUrl: projectUrl.value,
+        theme: theme.value,
+
+        A1,A2,A3,A4,Atotal,
+        B1,B2,B3,B4,Btotal,
+        C1,C2,C3,C4,C5,Ctotal,
+        D1,D2,Dtotal,
+
+        grandTotal,
+        average,
+
+        top30: top30.value,
+        simulation: simulation.value,
+        comments: comments.value,
+        trigram: trigram.value,
+        evaluatorName: evaluatorName.value
+    };
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = scriptURL;
+    form.target = "hidden_iframe";
+
+    for (let key in data) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = data[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    document.getElementById("successModal").style.display = "flex";
+});
+
+</script>
+
+<script>
+function goHome() {
+    window.location.href = "index.html"; // homepage file name
+}
+</script>
+
+<!-- Hidden iframe -->
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
+</body>
+</html>
