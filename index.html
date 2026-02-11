@@ -17,14 +17,15 @@
             background-size: cover;
         }
 
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9);
-            z-index: -1;
-        }
+        .fade-overlay {
+			width: 100%;
+			height: 100%;
+			background: rgba(255,255,255,0.8); /* faint overlay */
+			backdrop-filter: blur(2px); /* optional, adds soft blur */
+			display: flex;
+			flex-direction: column;
+		}
+
 
         header {
             display: flex;
@@ -176,6 +177,8 @@
     </style>
 </head>
 <body>
+<div class="fade-overlay">
+<header> ... </header>
 <header>
     <h1>AAKRUTI Innovation Competition</h1>
     <div class="top-logo">
@@ -230,6 +233,8 @@
     <img src="https://github.com/surajgajbhiye15/index/blob/main/image2.png?raw=true" alt="Partner Logos Banner">
 </footer>
 
+<footer> ... </footer>
+ </div>
 <script>
 function startEvaluation() {
     window.location.href = "evaluation.html";
@@ -311,5 +316,3 @@ setInterval(loadDashboard, 10000); // refresh every 10 sec
 
 </body>
 </html>
-
-
